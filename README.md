@@ -93,4 +93,4 @@ Github:@tung-programming
 
 ## License
 
-[MIT LICENSE](LICENSE)
+[MIT LICENSE](LICENSE.md)
