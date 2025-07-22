@@ -1,145 +1,93 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-  <title>Sensor Dashboard</title>
-  <style>
-    body {
-      font-family: Arial;
-      padding: 20px;
-      background: linear-gradient(to right, #ff9966, #ff5e62);
-    }
-
-    h1 {
-      color: black;
-      text-align: center;
-      margin-bottom: 30px;
-    }
-
-    .sensor-box {
-      background: #fff;
-      border-radius: 12px;
-      padding: 15px 20px;
-      margin: 20px auto;
-      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      max-width: 400px;
-    }
-
-    .sensor-box strong {
-      font-size: 18px;
-    }
-
-    .status-box {
-      margin-top: 8px;
-      padding: 8px 12px;
-      border-radius: 8px;
-      font-weight: bold;
-      color: white;
-      display: inline-block;
-    }
-
-    .status-green {
-      background-color: #4CAF50; /* Green */
-    }
-
-    .status-red {
-      background-color: #f44336; /* Red */
-    }
-
-    .status-yellow {
-      background-color: #fbc02d; /* Optional for intermediate */
-      color: black;
-    }
-  </style>
-
-  <script>
-    function fetchData() {
-      fetch('/data')
-        .then(response => response.json())
-        .then(data => {
-          // Update raw values
-          document.getElementById('soilRaw').innerText = data.soil;
-          document.getElementById('smokeRaw').innerText = data.smoke;
-          document.getElementById('ldrRaw').innerText = data.ldr;
-          document.getElementById('flameRaw').innerText = data.flame;
-          document.getElementById('tempRaw').innerText = data.temp;
-
-          // Soil logic
-          const soilStatus = document.getElementById('soilStatus');
-          if (data.soil > 700) {
-            soilStatus.innerText = "🚱 No signs of flood";
-            soilStatus.className = "status-box status-green";
-          } else if (data.soil > 400) {
-            soilStatus.innerText = "💧 Moisture detected";
-            soilStatus.className = "status-box status-yellow";
-          } else {
-            soilStatus.innerText = "🌊 Water level rising";
-            soilStatus.className = "status-box status-red";
-          }
-
-          // Smoke logic
-          const smokeStatus = document.getElementById('smokeStatus');
-          if (data.smoke > 400) {
-            smokeStatus.innerText = "⚠️ Smoke or Gas Detected!";
-            smokeStatus.className = "status-box status-red";
-          } else {
-            smokeStatus.innerText = "✅ Air is Clean";
-            smokeStatus.className = "status-box status-green";
-          }
-
-          // LDR logic
-          const ldrStatus = document.getElementById('ldrStatus');
-          if (data.ldr < 300) {
-            ldrStatus.innerText = "🌞 Bright Light,Full Power";
-            ldrStatus.className = "status-box status-green";
-          } else if (data.ldr < 700) {
-            ldrStatus.innerText = "🌤 Medium Light,Unstable Power";
-            ldrStatus.className = "status-box status-yellow";
-          } else {
-            ldrStatus.innerText = "🌑 It's Dark,No Power";
-            ldrStatus.className = "status-box status-red";
-          }
-
-          // Flame logic
-          const flameStatus = document.getElementById('flameStatus');
-          if (data.flame == 0) {
-            flameStatus.innerText = "🔥 Flame Detected!";
-            flameStatus.className = "status-box status-red";
-          } else {
-            flameStatus.innerText = "✅ No Flame";
-            flameStatus.className = "status-box status-green";
-          }
-        });
-    }
-
-    setInterval(fetchData, 2000);
-  </script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Hazard Monitoring Dashboard</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
 </head>
 <body>
-  <h1>🌡️ Hazard Monitoring System</h1>
 
-  <div class="sensor-box">
-    <strong>💧 Moisture:</strong> <span id="soilRaw">--</span><br>
-    <div id="soilStatus" class="status-box">--</div>
-  </div>
+    <div id="alert-container" class="position-fixed top-0 end-0 p-3" style="z-index: 1100;">
+        </div>
 
-  <div class="sensor-box">
-    <strong>💨 Smoke Level:</strong> <span id="smokeRaw">--</span><br>
-    <div id="smokeStatus" class="status-box">--</div>
-  </div>
+    <div class="container-fluid my-4">
+        <div class="d-flex justify-content-between align-items-center mb-4">
+            <h1 class="mb-0"><b><i class="fas fa-satellite"></i> Orbital Habitat Monitoring</b></h1>
+            <div class="form-check form-switch">
+                <input class="form-check-input" type="checkbox" id="darkModeToggle">
+                <label class="form-check-label" for="darkModeToggle"><i class="fas fa-moon"></i> Dark Mode</label>
+            </div>
+        </div>
 
-  <div class="sensor-box">
-    <strong>💡 Electricity:</strong> <span id="ldrRaw">--</span><br>
-    <div id="ldrStatus" class="status-box">--</div>
-  </div>
+        <div class="row mb-4 g-4">
+            <div class="col-xl-3 col-md-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-secondary"><i class="fas fa-water"></i> Coolant & Humidity</h5>
+                        <p class="sensor-value" id="soilValue">--</p>
+                        <p class="card-text fw-bold" id="soilStatus">--</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-secondary"><i class="fas fa-wind"></i> Atmospheric Purity</h5>
+                        <p class="sensor-value" id="smokeValue">--</p>
+                        <p class="card-text fw-bold" id="smokeStatus">--</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div class="card h-100 shadow-sm">
+                    <div class="card-body">
+                        <h5 class="card-title text-secondary"><i class="fas fa-sun"></i> Ambient Light Sensor</h5>
+                        <p class="sensor-value" id="ldrValue">--</p>
+                        <p class="card-text fw-bold" id="ldrStatus">--</p>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-md-6">
+                <div id="flameCard" class="card h-100 shadow-sm">
+                    <div class="card-body text-center">
+                        <h5 class="card-title text-secondary"><i class="fas fa-fire"></i> Combustion Sensor</h5>
+                        <p class="display-4" id="flameStatusIcon">--</p>
+                        <p class="fw-bold fs-5" id="flameStatusText">--</p>
+                    </div>
+                </div>
+            </div>
+        </div>
 
-  <div class="sensor-box">
-    <strong>🔥 Flame:</strong> <span id="flameRaw">--</span><br>
-    <div id="flameStatus" class="status-box">--</div>
-  </div>
+        <div class="row mb-4 g-4">
+            <div class="col-lg-4"><div class="card shadow-sm"><div class="card-body"><canvas id="soilChart"></canvas></div></div></div>
+            <div class="col-lg-4"><div class="card shadow-sm"><div class="card-body"><canvas id="smokeChart"></canvas></div></div></div>
+            <div class="col-lg-4"><div class="card shadow-sm"><div class="card-body"><canvas id="ldrChart"></canvas></div></div></div>
+        </div>
 
-  <div class="sensor-box">
-    <strong>🌡️ Temperature (°C):</strong> <span id="tempRaw">--</span>
-  </div>
+        <div class="row g-4">
+            <div class="col-lg-6">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title"><i class="fas fa-history"></i> Historical Sensor Log</h5>
+                        <div id="historyLog" class="log-panel list-group flex-grow-1"></div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="card shadow-sm h-100">
+                    <div class="card-body d-flex flex-column">
+                        <h5 class="card-title"><i class="fas fa-bell"></i> System Notification Log</h5>
+                        <div id="pushbulletLog" class="log-panel list-group flex-grow-1"></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
 
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="{{ url_for('static', filename='script.js') }}"></script>
 </body>
 </html>
