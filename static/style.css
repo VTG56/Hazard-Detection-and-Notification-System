@@ -1,0 +1,96 @@
+/* static/style.css */
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background-color: #f4f7f6;
+    color: #333;
+    transition: background-color 0.3s, color 0.3s;
+}
+
+/* --- Dark Mode --- */
+body.dark-mode {
+    background-color: #1a1a2e;
+    color: #e0e0e0;
+}
+body.dark-mode .card-title { color: #e0e0e0; }
+.card.dark-mode {
+    background-color: #16213e;
+    border: 1px solid #0f3460;
+}
+.list-group-item.dark-mode {
+    background-color: #16213e;
+    border-color: #0f3460;
+    color: #e0e0e0;
+}
+
+/* --- General --- */
+h1 { color: #e94560; }
+.card { transition: transform 0.2s; }
+.card:hover { transform: translateY(-5px); }
+.sensor-value {
+    font-size: 2.5rem;
+    font-weight: bold;
+    color: #0f3460;
+}
+body.dark-mode .sensor-value { color: #e94560; }
+
+/* --- Flame Alert --- */
+#flameCard.flame-active {
+    border: 2px solid #ff4136;
+    animation: blink-flame 1s infinite;
+}
+@keyframes blink-flame {
+    50% { background-color: #ff4136; color: white; }
+}
+
+/* --- On-Screen Toast Alerts --- */
+.toast-alert {
+    padding: 1rem 1.5rem;
+    border-radius: 0.5rem;
+    box-shadow: 0 5px 15px rgba(0,0,0,0.2);
+    margin-bottom: 1rem;
+    opacity: 0;
+    transform: translateX(100%);
+    transition: all 0.5s ease-in-out;
+}
+.toast-alert.show {
+    opacity: 1;
+    transform: translateX(0);
+}
+.toast-header {
+    font-weight: bold;
+    font-size: 1.1rem;
+}
+.toast-body { font-size: 0.9rem; }
+
+/* Alert Severity Styles */
+.toast-info { background-color: #0dcaf0; color: white; }
+.toast-medium { background-color: #ffc107; color: #333; }
+.toast-critical { background-color: #dc3545; color: white; }
+.toast-escalation {
+    background-color: #e94560;
+    color: white;
+    border: 3px solid #fff;
+    animation: pulse-red 1s infinite;
+}
+
+@keyframes pulse-red {
+    0% { transform: scale(1); box-shadow: 0 0 0 0 rgba(233, 69, 96, 0.7); }
+    70% { transform: scale(1.02); box-shadow: 0 0 0 10px rgba(233, 69, 96, 0); }
+    100% { transform: scale(1); box-shadow: 0 0 0 0 rgba(233, 69, 96, 0); }
+}
+
+/* --- Log Panels --- */
+.log-panel {
+    height: 300px;
+    overflow-y: auto;
+    border: 1px solid #ddd;
+    border-radius: 5px;
+}
+body.dark-mode .log-panel { border-color: #0f3460; }
+.log-entry {
+    font-size: 0.9rem;
+    border-bottom: 1px solid #eee;
+    padding: 4px;
+}
+body.dark-mode .log-entry { border-bottom: 1px solid #16213e; }

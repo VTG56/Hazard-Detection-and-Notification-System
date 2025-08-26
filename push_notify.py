@@ -1,4 +1,5 @@
 import requests
+<<<<<<< HEAD
 from dotenv import load_dotenv
 import os
 
@@ -10,6 +11,11 @@ API_KEY = os.getenv("API_KEY")
 
 # Replace this with your actual Pushbullet Access Token
 ACCESS_TOKEN = API_KEY;
+=======
+
+# Replace this with your actual Pushbullet Access Token
+ACCESS_TOKEN = "o.bfpqJlkU6hbOl1TRwJx0D5wYAWmeXtGJ"
+>>>>>>> 7aa9dc46791a17752f9451bc228935327b4bdfd5
 
 # Message details
 TITLE = "Hazard Alert"
