@@ -33,10 +33,10 @@ void loop() {
   Serial.print(",");
   Serial.print(ldrValue);
   Serial.print(",");
-  Serial.print(temperatureC);
-  Serial.print(",");
+  //Serial.print(temperatureC);
+  //Serial.print(",");
   Serial.println(flameDetected);
    // newline ends the data packet
 
-  delay(2000);  // Read every 2 seconds
+  delay(100);  // Read every 2 seconds
 }

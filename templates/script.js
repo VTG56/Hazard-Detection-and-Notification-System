@@ -7,7 +7,6 @@ function fetchData() {
           document.getElementById('smokeRaw').innerText = data.smoke;
           document.getElementById('ldrRaw').innerText = data.ldr;
           document.getElementById('flameRaw').innerText = data.flame;
-          document.getElementById('tempRaw').innerText = data.temp;
 
           // Soil logic
           const soilStatus = document.getElementById('soilStatus');
@@ -24,7 +23,7 @@ function fetchData() {
 
           // Smoke logic
           const smokeStatus = document.getElementById('smokeStatus');
-          if (data.smoke > 400) {
+          if (data.smoke > 200) {
             smokeStatus.innerText = "⚠️ Smoke or Gas Detected!";
             smokeStatus.className = "status-box status-red";
           } else {
@@ -57,4 +56,4 @@ function fetchData() {
         });
     }
 
-    setInterval(fetchData, 2000);
+    setInterval(fetchData, 900);

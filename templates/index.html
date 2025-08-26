@@ -61,7 +61,7 @@
           document.getElementById('smokeRaw').innerText = data.smoke;
           document.getElementById('ldrRaw').innerText = data.ldr;
           document.getElementById('flameRaw').innerText = data.flame;
-          document.getElementById('tempRaw').innerText = data.temp;
+          
 
           // Soil logic
           const soilStatus = document.getElementById('soilStatus');
@@ -118,7 +118,7 @@
   <h1>🌡️ Hazard Monitoring System</h1>
 
   <div class="sensor-box">
-    <strong>💧 Moisture:</strong> <span id="soilRaw">--</span><br>
+    <strong>💧 MOISTURE :</strong> <span id="soilRaw">--</span><br>
     <div id="soilStatus" class="status-box">--</div>
   </div>
 
@@ -128,7 +128,7 @@
   </div>
 
   <div class="sensor-box">
-    <strong>💡 Electricity:</strong> <span id="ldrRaw">--</span><br>
+    <strong>💡 LIGHT INTENSITY:</strong> <span id="ldrRaw">--</span><br>
     <div id="ldrStatus" class="status-box">--</div>
   </div>
 
@@ -137,9 +137,6 @@
     <div id="flameStatus" class="status-box">--</div>
   </div>
 
-  <div class="sensor-box">
-    <strong>🌡️ Temperature (°C):</strong> <span id="tempRaw">--</span>
-  </div>
 
 </body>
 </html>
