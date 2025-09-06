@@ -32,10 +32,10 @@
 - Pushbullet API: Used to send push notifications to connected devices.
 ---
 ## 🔧 How It Works
--- 🔌 Arduino Setup
+- 🔌 Arduino Setup
 The Arduino code is responsible for reading analog and digital values from the connected sensors. It formats this data into a comma-separated string (e.g., soil_value,smoke_value,ldr_value,flame_value) and sends it to the computer via the serial port.
 
--- 🖥 Flask Server
+- 🖥 Flask Server
 The Python Flask server listens for the sensor data on a specified serial port. It processes the incoming string, updates a global dictionary with the latest readings, and makes this data available to the web frontend via a dedicated API endpoint (/data). The server also contains the core notification logic, checking sensor values against predefined thresholds and using the Pushbullet API to send alerts when necessary.
 ---
 ## File Structure
@@ -55,8 +55,7 @@ project/
 - Install Python Requirements
 
 - Open your terminal or command prompt and install the required libraries:
-
--- pip install flask pyserial requests
+  pip install flask pyserial requests
 - Configure Pushbullet Notifications
 
 - Sign up for a free Pushbullet account and get your Access Token from your account settings.
