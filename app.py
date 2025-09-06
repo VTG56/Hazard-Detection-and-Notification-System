@@ -1,5 +1,3 @@
-# app.py
-
 from flask import Flask, render_template, jsonify
 import serial
 import threading
@@ -11,7 +9,7 @@ from collections import deque
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
 # --- PUSHBULLET & NOTIFICATION LOG ---
-PUSHBULLET_TOKEN = "o.2yzRZKljdyVfn2fVVCyQbkql5fqFycl3"  # ← Your Pushbullet Token
+PUSHBULLET_TOKEN = API_KEY  # ← Your Pushbullet Token
 PUSHBULLET_API_URL = "https://api.pushbullet.com/v2/pushes"
 HEADERS = {
     "Access-Token": PUSHBULLET_TOKEN,
@@ -53,35 +51,60 @@ def send_pushbullet_notification(title, body, severity="info"):
     """Sends a notification, logs it with a severity, and prints to console."""
     payload = {"type": "note", "title": title, "body": body}
     try:
-        # Send to Pushbullet
         res = requests.post(PUSHBULLET_API_URL, json=payload, headers=HEADERS)
-        log_timestamp = datetime.now().strftime('%H:%M:%S.%f') # Added microseconds for unique key
-        
-        # Log for frontend
-        log_entry = {
-            "timestamp": log_timestamp,
-            "title": title,
-            "body": body,
-            "severity": severity # e.g., 'medium', 'critical', 'escalation'
-        }
-        notification_log.appendleft(log_entry)
-        
         if res.status_code == 200:
-            print(f"📨 [{severity.upper()}] Pushbullet notification sent: {title}")
+            print(f"📨 Pushbullet notification sent: {title}")
         else:
             print(f"❌ Notification failed: {res.status_code} {res.text}")
-            
     except Exception as e:
         print(f"⚠ Error sending Pushbullet notification: {e}")
 
-# --- SENSOR DATA HANDLING ---
-ser = None
-SERIAL_PORT = 'COM5'
-BAUD_RATE = 9600
+# Flags to avoid repeated alerts
+notified = {
+    "soil": False,
+    "smoke": False,
+    "ldr": False,
+    "flame": False
+}
+
+# Last notification timestamps
+lastnotif = {
+    "soil": 0,
+    "smoke": 0,
+    "ldr": 0,
+    "flame": 0
+}
+
+# Minimum seconds between notifications per sensor
+notifdelay = {
+    "soil": 10,    # notify once every 60 sec
+    "smoke": 0.1,
+    "ldr": 20,
+    "flame": 0   # more aggressive (0 sec)
+}
+
+
+# --- FLASK & SERIAL SETUP ---
+app = Flask(__name__, template_folder="templates")
+SERIAL_PORT = 'COM5'     # Change if needed
+BAUD_RATE     = 9600
+ser           = None
+
+sensor_data = {
+    "soil": 0,
+    "smoke": 0,
+    "ldr": 0,
+    #"temperature":    still tracked but no sensor attached
+    "flame": 1
+}
 
 def read_from_arduino():
-    """Reads serial data from Arduino and triggers notification checks."""
-    global sensor_data
+    global ser, sensor_data, notified
+
+    if ser is None:
+        print("❌ Serial port not available.")
+        return
+
     while True:
         if ser and ser.is_open:
             try:
@@ -238,19 +261,22 @@ def index():
 
 @app.route('/data')
 def data():
-    return jsonify(sensor_data)
+    data_with_time = sensor_data.copy()
+    data_with_time["timestamp"] = datetime.now().strftime('%Y-%m-%d %H:%M:%S')
+    return jsonify(data_with_time)
 
-@app.route('/notifications')
-def notifications():
-    return jsonify(list(notification_log))
-
-# --- MAIN ---
+# ——— MAIN ———
 if __name__ == '__main__':
-    threading.Thread(target=read_from_arduino, daemon=True).start()
     try:
-        ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=2)
-        print(f"✅ Connected to Arduino on {SERIAL_PORT}")
-    except serial.SerialException as e:
-        print(f"❌ Could not connect to {SERIAL_PORT}. Running in simulated mode. Error: {e}")
+        ser = serial.Serial(SERIAL_PORT, BAUD_RATE, timeout=1)
+        print(f"✅ Connected to {SERIAL_PORT}")
+    except Exception as e:
+        print(f"❌ Serial error: {e}")
         ser = None
+
+    if ser:
+        # (Already started above, but safe to ensure it’s running)
+        threading.Thread(target=read_from_arduino, daemon=True).start()
+
+    # Run Flask without reloader to avoid duplicate threads
     app.run(debug=True, use_reloader=False)

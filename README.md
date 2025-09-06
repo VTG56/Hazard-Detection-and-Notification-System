@@ -1,96 +1,70 @@
 # 🌡️ Real-Time Sensor Monitoring Dashboard
-
-A web-based IoT dashboard that reads real-time data from multiple sensors using Arduino and displays it on a live web interface using Python Flask.
-
+## This project is a real-time IoT dashboard that reads data from multiple sensors connected to an Arduino and displays it on a live web interface. It uses a Python Flask backend to handle the data processing and a clean frontend for visualization.
+---
 ## 📦 Features
+- 🌱 Soil Moisture Monitoring: Detects moisture levels to indicate potential floods or rain.
 
-- 🌱 **Soil Moisture Monitoring** (Flood detection)
-- 💨 **Smoke/Gas Detection**
-- 💡 **LDR Light Intensity**
-- 🔥 **Flame Detection**
-- 🌡️ **Temperature Monitoring**
-- 📊 Real-time updates every 2 seconds via Flask
-- 🟢 Intuitive UI with colored alert indicators (green = normal, red = danger)
-- 🧠 Easy to expand and integrate with ML models or alerts
+- 💨 Smoke/Gas Detection: Monitors for gas or smoke to alert of fire hazards.
 
+- 💡 LDR Light Intensity: Measures ambient light.
+
+- 🔥 Flame Detection: Provides an immediate warning for flames.
+
+- 📊 Real-time Updates: Data is fetched from the Arduino and updated on the dashboard every 2 seconds.
+
+- 🟢 Intuitive UI: Features a simple, modern design with color-coded alerts (green = normal, red = danger) for quick visual cues.
+
+- 📨 Pushbullet Notifications: Automatically sends mobile alerts for critical events, such as high smoke levels or flame detection.
 ---
-
 ## 🧰 Technologies Used
+- ⚡ Arduino Nano/Uno: The microcontroller for reading sensor data.
 
-- ⚡ **Arduino Nano/Uno**
-- 🐍 **Python 3**
-- 🔌 **Flask** for the backend server
-- 🧠 **HTML + JavaScript** for the frontend
-- 🎨 **CSS (Gradient + Flexbox)** for styling
-- 🧪 **Sensors Used**: Soil Moisture (analog), Smoke (MQ-2), LDR, Flame Sensor (digital), DHT11/DHT22
+- 🐍 Python 3: The programming language used for the backend server.
 
+- 🔌 Flask: A lightweight Python web framework for handling server-side logic and routing.
+
+- 🧠 HTML + JavaScript: Used for building the interactive web frontend.
+
+- 🎨 CSS (Gradient + Flexbox): Provides a responsive and visually appealing user interface.
+
+- Requests: A Python library for making API calls to the Pushbullet service.
+
+- Pushbullet API: Used to send push notifications to connected devices.
 ---
-
 ## 🔧 How It Works
+- 🔌 Arduino Setup
+The Arduino code is responsible for reading analog and digital values from the connected sensors. It formats this data into a comma-separated string (e.g., soil_value,smoke_value,ldr_value,flame_value) and sends it to the computer via the serial port.
 
-### 🔌 Arduino Setup
-
-- Collects data from sensors
-- Sends a comma-separated string via serial (e.g. `600,350,720,1,28`)
-- Format:  
-  `soil,smoke,ldr,flame,temp`
-
-### 🖥 Flask Server
-
-- Listens on serial port (e.g. `COM7`)
-- Parses incoming sensor data
-- Hosts web dashboard on `http://127.0.0.1:5000`
-
+- 🖥 Flask Server
+The Python Flask server listens for the sensor data on a specified serial port. It processes the incoming string, updates a global dictionary with the latest readings, and makes this data available to the web frontend via a dedicated API endpoint (/data). The server also contains the core notification logic, checking sensor values against predefined thresholds and using the Pushbullet API to send alerts when necessary.
 ---
-
 ## File Structure
+- project/
+- │
+- ├── arduinofilemain.ino         # Arduino code for sensor readings
+- ├── app.py                      # Python Flask backend
+- ├── templates/
+- │   └── index.html              # Frontend UI
+- └── README.md                   # Project documentation
+---
+## 🚀 Getting Started
+- Upload the Arduino Code
 
-```bash
-project/
-│
-├── arduino_code.ino              # Arduino code for sensor readings
-├── app.py                        # Python Flask backend
-├── templates/
-│   └── index.html                # Frontend UI
-├── static/                       # (Optional) CSS or image assets
-├── LICENSE                       # MIT License file
-└── README.md
-```
+- Upload the arduinofilemain.ino code to your Arduino board using the Arduino IDE.
 
-## Getting Started
+- Install Python Requirements
 
-1. Upload Arduino Code
-   Upload your Arduino code using the Arduino IDE
+- Open your terminal or command prompt and install the required libraries:
+  pip install flask pyserial requests
+- Configure Pushbullet Notifications
 
-2. Install Python Requirements
+- Sign up for a free Pushbullet account and get your Access Token from your account settings.
 
-   ```bash
-   pip install flask flask_socketio pyserial pandas joblib
-   ```
+- Open app.py and replace the placeholder value for PUSHBULLET_TOKEN with your actual token.
 
-3. Run Flask Server
-   ```bash
-   python app.py
-   Then open your browser and go to: http://127.0.0.1:5000
-   ```
+- Run the Flask Server
 
-## Troubleshooting
+- Open your terminal, navigate to the project directory, and start the server:
+-- python app.py
+- Open your web browser and go to http://127.0.0.1:5000 to view the dashboard.
 
--Make sure only one program is accessing the COM port (close Arduino Serial Monitor).
-
--Check your COM port in app.py
-
--If data shows 0, ensure:
--Arduino is connected properly
--Baud rate is correct
--Sensors are wired and powered correctly
-
-## Author
-
-Tushar P
-Email: tusharpradeep24@gmail.com
-Github:@tung-programming
-
-## License
-
-[MIT LICENSE](LICENSE.md)
