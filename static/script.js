@@ -81,7 +81,7 @@ document.addEventListener('DOMContentLoaded', function () {
         }
 
         const smokeStatusEl = document.getElementById('smokeStatus');
-        if (data.smoke > 400) {
+        if (data.smoke > 200) {
             smokeStatusEl.innerText = "Status: CRITICAL Air Contamination!";
             smokeStatusEl.className = "text-danger fw-bold";
         } else {
@@ -184,7 +184,7 @@ document.addEventListener('DOMContentLoaded', function () {
         setTimeout(() => toast.classList.add('show'), 100);
 
         // Auto-dismiss after a delay (longer for more severe alerts)
-        const delay = notif.severity === 'escalation' ? 20000 : 10000;
+        const delay = notif.severity === 'escalation' ? 20000 : 1800;
         setTimeout(() => {
             toast.classList.remove('show');
             // Remove from DOM after transition ends

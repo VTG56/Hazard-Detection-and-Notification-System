@@ -11,7 +11,7 @@ from collections import deque
 app = Flask(__name__, template_folder="templates", static_folder="static")
 
 # --- PUSHBULLET & NOTIFICATION LOG ---
-PUSHBULLET_TOKEN = "o.bfpqJlkU6hbOl1TRwJx0D5wYAWmeXtGJ"  # ← Your Pushbullet Token
+PUSHBULLET_TOKEN = "o.2yzRZKljdyVfn2fVVCyQbkql5fqFycl3"  # ← Your Pushbullet Token
 PUSHBULLET_API_URL = "https://api.pushbullet.com/v2/pushes"
 HEADERS = {
     "Access-Token": PUSHBULLET_TOKEN,
@@ -25,7 +25,7 @@ notification_log = deque(maxlen=20) # Increased size for better logging
 last_notif_time = {"soil": 0, "smoke": 0, "ldr": 0, "flame": 0}
 
 # Initial Notification Delay: Flame/Smoke: 0.5s, Moisture/LDR: 10s
-NOTIF_DELAY_S = {"soil": 10, "smoke": 2, "ldr": 10, "flame": 2} 
+NOTIF_DELAY_S = {"soil": 5, "smoke": 0.2, "ldr": 5, "flame": 0.2} 
 
 # Hazard Escalation Delay: 30 seconds
 CRITICAL_ESCALATION_DELAY_S = 10
@@ -157,8 +157,8 @@ def check_and_send_notifications(data):
 
     # --- 3. Moisture Sensor (Coolant Leak & Condensation) ---
     soil_value = data["soil"]
-    is_flood_risk = soil_value < 400
-    is_condensation_risk = 400 <= soil_value < 600
+    is_flood_risk = soil_value < 590
+    is_condensation_risk = 400 <= soil_value < 700
 
     if is_flood_risk:
         if current_time - last_notif_time["soil"] > NOTIF_DELAY_S["soil"]:
