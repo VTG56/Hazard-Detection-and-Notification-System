@@ -1,6 +1,10 @@
 # 🌡️ Real-Time Sensor Monitoring Dashboard
 ## This project is a real-time IoT dashboard that reads data from multiple sensors connected to an Arduino and displays it on a live web interface. It uses a Python Flask backend to handle the data processing and a clean frontend for visualization.
 ---
+## Project History
+
+The initial development and core framework were established by the team, with valuable contributions from **tung-programming** as a key collaborator. 
+---
 ## 📦 Features
 - 🌱 Soil Moisture Monitoring: Detects moisture levels to indicate potential floods or rain.
 
