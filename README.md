@@ -39,13 +39,13 @@ The Arduino code is responsible for reading analog and digital values from the c
 The Python Flask server listens for the sensor data on a specified serial port. It processes the incoming string, updates a global dictionary with the latest readings, and makes this data available to the web frontend via a dedicated API endpoint (/data). The server also contains the core notification logic, checking sensor values against predefined thresholds and using the Pushbullet API to send alerts when necessary.
 ---
 ## File Structure
-project/
-│
-├── arduinofilemain.ino         # Arduino code for sensor readings
-├── app.py                      # Python Flask backend
-├── templates/
-│   └── index.html              # Frontend UI
-└── README.md                   # Project documentation
+- project/
+- │
+- ├── arduinofilemain.ino         # Arduino code for sensor readings
+- ├── app.py                      # Python Flask backend
+- ├── templates/
+- │   └── index.html              # Frontend UI
+- └── README.md                   # Project documentation
 ---
 ## 🚀 Getting Started
 - Upload the Arduino Code
