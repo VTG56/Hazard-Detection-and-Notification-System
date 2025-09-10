@@ -1,4 +1,4 @@
-# 🌡️ Real-Time Sensor Monitoring Dashboard
+# 🌡️ Real-Time Hazard Monitoring System
 ### This project is a real-time IoT dashboard that reads data from multiple sensors connected to an Arduino and displays it on a live web interface. It uses a Python Flask backend to handle the data processing and a clean frontend for visualization.
 ---
 ## Project History
